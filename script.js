@@ -362,6 +362,25 @@ el.sound.addEventListener('click', toggleSound());
 
 
 
+// ---------------- YOUR ORIGINAL CODE ABOVE (UNCHANGED) ----------------
+
+
+// ---------------- FIX: GLOBAL SOUND CONTROL ---------------- //
+let soundEnabled = true;
+
+// Override play to respect mute
+const originalBlopPlay = el.blop.play.bind(el.blop);
+const originalBlupPlay = el.blup.play.bind(el.blup);
+
+el.blop.play = () => {
+  if (soundEnabled) return originalBlopPlay();
+};
+
+el.blup.play = () => {
+  if (soundEnabled) return originalBlupPlay();
+};
+
+
 // ---------------- NEW PROPOSAL LOGIC ---------------- //
 
 const animationScreen = document.getElementById("animationScreen");
@@ -374,48 +393,67 @@ const btnContainer = document.getElementById("btnContainer");
 
 let noClickCount = 0;
 
-// 👉 Show proposal AFTER one full animation loop
+// 👉 Show proposal AFTER one loop
 setTimeout(() => {
   animationScreen.style.display = "none";
   proposalScreen.classList.remove("hidden");
 }, 4300);
 
-// YES CLICK
+
+// ✅ YES CLICK
 yesBtn.addEventListener("click", () => {
   proposalScreen.classList.add("hidden");
+
+  // ❌ REMOVE ALL BUTTONS COMPLETELY
+  btnContainer.innerHTML = "";
+
   finalScreen.classList.remove("hidden");
 });
 
-// NO CLICK BEHAVIOR
+
+// ❌ NO CLICK
 noBtn.addEventListener("click", () => {
   noClickCount++;
 
-  // 🔇 STOP ALL SOUNDS IMMEDIATELY
+  // 🔇 DISABLE ALL FUTURE SOUND
+  soundEnabled = false;
+
+  // 🔇 STOP CURRENT SOUND
   el.blup.pause();
   el.blop.pause();
 
   el.blup.currentTime = 0;
   el.blop.currentTime = 0;
 
-  el.blup.volume = 0;
-  el.blop.volume = 0;
-
-  // Increase YES size
+  // ✅ FIX SCALE SYNTAX
   yesBtn.style.transform = `scale(${1 + noClickCount * 0.3})`;
 
-  // Duplicate YES button
+  // ✅ DUPLICATE YES (NO SOUND)
   const newYes = yesBtn.cloneNode(true);
-  newYes.onclick = () => yesBtn.click();
+
+  newYes.onclick = () => {
+    proposalScreen.classList.add("hidden");
+    btnContainer.innerHTML = "";
+    finalScreen.classList.remove("hidden");
+  };
+
   btnContainer.appendChild(newYes);
 
-  // Flood screen after many NO clicks
+  // 💥 FLOOD SCREEN
   if (noClickCount > 5) {
     for (let i = 0; i < 20; i++) {
       const floodYes = yesBtn.cloneNode(true);
+
       floodYes.style.position = "absolute";
       floodYes.style.left = Math.random() * 90 + "%";
       floodYes.style.top = Math.random() * 90 + "%";
-      floodYes.onclick = () => yesBtn.click();
+
+      floodYes.onclick = () => {
+        proposalScreen.classList.add("hidden");
+        btnContainer.innerHTML = "";
+        finalScreen.classList.remove("hidden");
+      };
+
       document.body.appendChild(floodYes);
     }
   }
