@@ -358,3 +358,55 @@ const toggleSound = () => {
   };
 };
 el.sound.addEventListener('click', toggleSound());
+
+
+
+
+// ---------------- NEW PROPOSAL LOGIC ---------------- //
+
+const animationScreen = document.getElementById("animationScreen");
+const proposalScreen = document.getElementById("proposalScreen");
+const finalScreen = document.getElementById("finalScreen");
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const btnContainer = document.getElementById("btnContainer");
+
+let noClickCount = 0;
+
+// 👉 Show proposal AFTER one full animation loop
+setTimeout(() => {
+  animationScreen.style.display = "none";
+  proposalScreen.classList.remove("hidden");
+}, 4300);
+
+// YES CLICK
+yesBtn.addEventListener("click", () => {
+  proposalScreen.classList.add("hidden");
+  finalScreen.classList.remove("hidden");
+});
+
+// NO CLICK BEHAVIOR
+noBtn.addEventListener("click", () => {
+  noClickCount++;
+
+  // Increase YES size
+  yesBtn.style.transform = `scale(${1 + noClickCount * 0.3})`;
+
+  // Duplicate YES button
+  const newYes = yesBtn.cloneNode(true);
+  newYes.onclick = () => yesBtn.click();
+  btnContainer.appendChild(newYes);
+
+  // After many NO clicks → flood screen
+  if (noClickCount > 5) {
+    for (let i = 0; i < 20; i++) {
+      const floodYes = yesBtn.cloneNode(true);
+      floodYes.style.position = "absolute";
+      floodYes.style.left = Math.random() * 90 + "%";
+      floodYes.style.top = Math.random() * 90 + "%";
+      floodYes.onclick = () => yesBtn.click();
+      document.body.appendChild(floodYes);
+    }
+  }
+});
