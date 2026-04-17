@@ -11,7 +11,7 @@ const el = {
   e: qs('.lttr--E'),
   y: qs('.lttr--Y'),
   o2: qs('.lttr--O2'),
-  m: qs('.lttr--M'),
+  u: qs('.lttr--U'),
 
   lineLeft: qs('.line--left'),
   lineRight: qs('.line--rght'),
@@ -256,7 +256,7 @@ const crtLoveTl = () => {
 
   new mojs.Html({ // I LOVE YO[U]
     ...opts,
-    el: el.m,
+    el: el.u,
     x: { 0: -32 } }).
   then({
     duration: boom,
