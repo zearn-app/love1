@@ -390,6 +390,16 @@ yesBtn.addEventListener("click", () => {
 noBtn.addEventListener("click", () => {
   noClickCount++;
 
+  // 🔇 STOP ALL SOUNDS IMMEDIATELY
+  el.blup.pause();
+  el.blop.pause();
+
+  el.blup.currentTime = 0;
+  el.blop.currentTime = 0;
+
+  el.blup.volume = 0;
+  el.blop.volume = 0;
+
   // Increase YES size
   yesBtn.style.transform = `scale(${1 + noClickCount * 0.3})`;
 
@@ -398,7 +408,7 @@ noBtn.addEventListener("click", () => {
   newYes.onclick = () => yesBtn.click();
   btnContainer.appendChild(newYes);
 
-  // After many NO clicks → flood screen
+  // Flood screen after many NO clicks
   if (noClickCount > 5) {
     for (let i = 0; i < 20; i++) {
       const floodYes = yesBtn.cloneNode(true);
