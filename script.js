@@ -402,14 +402,8 @@ setTimeout(() => {
 
 // ✅ YES CLICK
 yesBtn.addEventListener("click", () => {
-  proposalScreen.classList.add("hidden");
-
-  // ❌ REMOVE ALL BUTTONS COMPLETELY
-  btnContainer.innerHTML = "";
-
-  finalScreen.classList.remove("hidden");
+  window.location.href = "yes.html";
 });
-
 
 // ❌ NO CLICK
 noBtn.addEventListener("click", () => {
@@ -432,11 +426,8 @@ noBtn.addEventListener("click", () => {
   const newYes = yesBtn.cloneNode(true);
 
   newYes.onclick = () => {
-    proposalScreen.classList.add("hidden");
-    btnContainer.innerHTML = "";
-    finalScreen.classList.remove("hidden");
-  };
-
+  window.location.href = "yes.html";
+};
   btnContainer.appendChild(newYes);
 
   // 💥 FLOOD SCREEN
@@ -449,11 +440,8 @@ noBtn.addEventListener("click", () => {
       floodYes.style.top = Math.random() * 90 + "%";
 
       floodYes.onclick = () => {
-        proposalScreen.classList.add("hidden");
-        btnContainer.innerHTML = "";
-        finalScreen.classList.remove("hidden");
-      };
-
+  window.location.href = "yes.html";
+};
       document.body.appendChild(floodYes);
     }
   }
