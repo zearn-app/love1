@@ -1,4 +1,6 @@
-* {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -26,7 +28,6 @@ body {
   fill: #763C8C;
 }
 
-/* Proposal */
 .proposal {
   text-align: center;
   color: #763C8C;
@@ -43,20 +44,19 @@ body {
 button {
   padding: 12px 20px;
   margin: 10px;
-  border: none;
   border-radius: 8px;
-  font-size: 16px;
+  border: none;
   cursor: pointer;
 }
 
 #yesBtn {
   background: #fa4843;
-  color: white;
+  color: #fff;
 }
 
 #noBtn {
   background: #763C8C;
-  color: white;
+  color: #fff;
 }
 
 .final {
