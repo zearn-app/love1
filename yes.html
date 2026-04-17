@@ -19,9 +19,9 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  cursor: none; /* ✨ custom cursor */
 }
 
-/* Center Card */
 .card {
   text-align: center;
   color: #763C8C;
@@ -32,6 +32,7 @@ body {
 h1 {
   font-size: 3rem;
   margin-bottom: 10px;
+  animation: glowText 2s ease-in-out infinite alternate;
 }
 
 p {
@@ -39,7 +40,6 @@ p {
   min-height: 40px;
 }
 
-/* Glow Heart */
 .heart {
   font-size: 60px;
   color: #fa4843;
@@ -51,7 +51,11 @@ p {
   50% { transform: scale(1.2); }
 }
 
-/* Floating Hearts */
+@keyframes glowText {
+  from { text-shadow: 0 0 10px #fff; }
+  to { text-shadow: 0 0 25px #fa4843; }
+}
+
 .hearts span {
   position: absolute;
   bottom: -50px;
@@ -65,7 +69,6 @@ p {
   100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
 }
 
-/* Confetti */
 .confetti {
   position: absolute;
   width: 8px;
@@ -82,7 +85,6 @@ p {
   }
 }
 
-/* Music Toggle */
 .music-btn {
   position: fixed;
   bottom: 20px;
@@ -93,6 +95,55 @@ p {
   border-radius: 20px;
   cursor: pointer;
 }
+
+/* ✨ Sparkle Cursor */
+.sparkle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkleFade 1s linear forwards;
+}
+
+@keyframes sparkleFade {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 🌙 Background glow particles */
+.glow {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: glowMove 10s linear infinite;
+}
+
+@keyframes glowMove {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+
+/* 💭 floating quotes */
+.quote {
+  position: absolute;
+  color: #763C8C;
+  font-size: 14px;
+  opacity: 0.6;
+  animation: floatQuote 12s linear infinite;
+}
+
+@keyframes floatQuote {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-20vh); opacity: 0; }
+}
+
 </style>
 </head>
 
@@ -102,65 +153,130 @@ p {
   <div class="heart">❤️</div>
   <h1>You Said YES 💖</h1>
   <p id="message"></p>
+  <p id="extraText"></p> <!-- 💌 new line -->
 </div>
 
 <div class="hearts" id="hearts"></div>
 
-<audio id="bgMusic" autoplay loop>
+<audio id="bgMusic" autoplay loop muted playsinline>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <div class="music-btn" id="musicBtn">Music 🎵</div>
 
 <script>
-// 💌 TYPEWRITER MESSAGE
+
+// 💌 TYPEWRITER MAIN
 const text = "From this moment, it's you and me forever... 💜✨";
 let i = 0;
-const speed = 50;
-
 function typeWriter() {
   if (i < text.length) {
     document.getElementById("message").innerHTML += text.charAt(i);
     i++;
-    setTimeout(typeWriter, speed);
+    setTimeout(typeWriter, 50);
   }
 }
 typeWriter();
 
 
+// 💖 EXTRA ROTATING TEXTS
+const loveLines = [
+  "You're my today and all my tomorrows 💕",
+  "Every heartbeat says your name ❤️",
+  "I found my forever in you 💍",
+  "You are my dream come true ✨",
+  "Together is my favorite place 💑"
+];
+
+let lineIndex = 0;
+setInterval(() => {
+  document.getElementById("extraText").innerText = loveLines[lineIndex];
+  lineIndex = (lineIndex + 1) % loveLines.length;
+}, 3000);
+
+
 // 💕 FLOATING HEARTS
 const heartsContainer = document.getElementById("hearts");
-
 setInterval(() => {
   const heart = document.createElement("span");
   heart.innerHTML = "❤";
   heart.style.left = Math.random() * 100 + "vw";
   heart.style.fontSize = (10 + Math.random() * 20) + "px";
   heart.style.animationDuration = (3 + Math.random() * 3) + "s";
-
   heartsContainer.appendChild(heart);
-
   setTimeout(() => heart.remove(), 6000);
 }, 300);
 
 
-// 🎆 CONFETTI BURST
+// 🎆 CONFETTI
 for (let i = 0; i < 80; i++) {
   const conf = document.createElement("div");
   conf.classList.add("confetti");
   conf.style.left = Math.random() * 100 + "vw";
   conf.style.background = ["#763C8C", "#fa4843", "#fff"][Math.floor(Math.random()*3)];
   conf.style.animationDuration = (2 + Math.random() * 2) + "s";
-
   document.body.appendChild(conf);
 }
 
 
-// 🎵 MUSIC TOGGLE
+// 🌙 GLOW PARTICLES
+setInterval(() => {
+  const glow = document.createElement("div");
+  glow.classList.add("glow");
+  glow.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(glow);
+  setTimeout(() => glow.remove(), 10000);
+}, 500);
+
+
+// 💭 FLOATING LOVE QUOTES
+const quotes = ["Love 💖", "Forever 💍", "Soulmate 💑", "Mine ❤️"];
+setInterval(() => {
+  const q = document.createElement("div");
+  q.classList.add("quote");
+  q.innerText = quotes[Math.floor(Math.random()*quotes.length)];
+  q.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(q);
+  setTimeout(() => q.remove(), 12000);
+}, 2000);
+
+
+// ✨ CURSOR SPARKLE
+document.addEventListener("mousemove", e => {
+  const sparkle = document.createElement("div");
+  sparkle.classList.add("sparkle");
+  sparkle.style.left = e.clientX + "px";
+  sparkle.style.top = e.clientY + "px";
+  document.body.appendChild(sparkle);
+  setTimeout(() => sparkle.remove(), 1000);
+});
+
+
+// 🎇 CLICK BURST EFFECT
+document.addEventListener("click", e => {
+  for (let i = 0; i < 10; i++) {
+    const burst = document.createElement("div");
+    burst.classList.add("sparkle");
+    burst.style.left = e.clientX + "px";
+    burst.style.top = e.clientY + "px";
+    burst.style.background = "#fa4843";
+    document.body.appendChild(burst);
+    setTimeout(() => burst.remove(), 1000);
+  }
+});
+
+
+// 🎵 MUSIC CONTROL
 const music = document.getElementById("bgMusic");
 const btn = document.getElementById("musicBtn");
+let playing = false;
 
-let playing = true;
+document.body.addEventListener("click", () => {
+  music.muted = false;
+  music.volume = 0.4;
+  music.play();
+  playing = true;
+}, { once: true });
 
 btn.onclick = () => {
   if (playing) {
@@ -172,12 +288,6 @@ btn.onclick = () => {
   }
   playing = !playing;
 };
-
-
-// 📱 MOBILE AUTOPLAY FIX
-document.body.addEventListener("click", () => {
-  music.play();
-}, { once: true });
 
 </script>
 
