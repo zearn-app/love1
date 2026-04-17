@@ -11,13 +11,13 @@ const el = {
   e: qs('.lttr--E'),
   y: qs('.lttr--Y'),
   o2: qs('.lttr--O2'),
-  u: qs('.lttr--U'),
+  m: qs('.lttr--M'),
 
   lineLeft: qs('.line--left'),
   lineRight: qs('.line--rght'),
 
   colTxt: "#763c8c",
-  colHeart: "#fa4843",
+  colHeart: "#b39ddb",
 
   blup: qs('.blup'),
   blop: qs('.blop'),
@@ -256,7 +256,7 @@ const crtLoveTl = () => {
 
   new mojs.Html({ // I LOVE YO[U]
     ...opts,
-    el: el.u,
+    el: el.m,
     x: { 0: -32 } }).
   then({
     duration: boom,
