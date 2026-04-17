@@ -1,334 +1,304 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>You Said Yes 💖</title>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: linear-gradient(-45deg, #FFC568, #ff9a9e, #fad0c4, #fbc2eb);
-  background-size: 400% 400%;
-  animation: gradientBG 12s ease infinite;
-  overflow: hidden;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  cursor: none;
-}
-
-/* 🌈 BACKGROUND ANIMATION */
-@keyframes gradientBG {
-  0% {background-position: 0% 50%;}
-  50% {background-position: 100% 50%;}
-  100% {background-position: 0% 50%;}
-}
-
-/* 💫 HEARTBEAT BACKGROUND PULSE */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, rgba(250,72,67,0.2), transparent 60%);
-  animation: bgPulse 3s infinite;
-  z-index: 0;
-}
-
-@keyframes bgPulse {
-  0%,100% { opacity: 0.3; transform: scale(1);}
-  50% { opacity: 0.6; transform: scale(1.1);}
-}
-
-/* 🌙 DARK VIGNETTE */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.25));
-  pointer-events: none;
-}
-
-/* 💌 CARD */
-.card {
-  text-align: center;
-  color: #763C8C;
-  z-index: 2;
-  animation: fadeIn 2s ease;
-  transition: transform 0.2s ease;
-  position: relative;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  inset: -40px;
-  background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);
-  filter: blur(20px);
-  z-index: -1;
-}
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  animation: glowText 2s ease-in-out infinite alternate;
-}
-
-p {
-  font-size: 1.4rem;
-  min-height: 40px;
-  transition: opacity 0.4s ease;
-}
-
-/* ❤️ HEART */
-.heart {
-  font-size: 60px;
-  color: #fa4843;
-  animation: beat 1s infinite;
-  position: relative;
-}
-
-.heart::before {
-  content: "✨";
-  position: absolute;
-  top: -20px;
-  right: -20px;
-  animation: sparkleSpin 2s infinite linear;
-}
-
-.heart::after {
-  content: "";
-  position: absolute;
-  inset: -10px;
-  border-radius: 50%;
-  border: 2px solid rgba(250,72,67,0.4);
-  animation: pulseRing 2s infinite;
-}
-
-@keyframes sparkleSpin {
-  100% { transform: rotate(360deg);}
-}
-
-@keyframes pulseRing {
-  100% {transform: scale(1.8); opacity: 0;}
-}
-
-@keyframes beat {
-  50% { transform: scale(1.2); }
-}
-
-/* 💖 GLOW TEXT */
-@keyframes glowText {
-  from { text-shadow: 0 0 10px #fff; }
-  to { text-shadow: 0 0 30px #fa4843; }
-}
-
-/* 💕 FLOATING HEARTS */
-.hearts span {
-  position: absolute;
-  bottom: -50px;
-  color: #fa4843;
-  animation: float 6s linear infinite;
-}
-
-@keyframes float {
-  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
-}
-
-/* 🎆 CONFETTI */
-.confetti {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  top: 0;
-  animation: fall linear forwards;
-}
-
-@keyframes fall {
-  to {
-    transform: translateY(100vh) rotate(720deg);
-    opacity: 0;
-  }
-}
-
-/* 🎵 MUSIC BUTTON */
-.music-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #fa4843;
-  color: #fff;
-  padding: 10px 15px;
-  border-radius: 20px;
-  cursor: pointer;
-}
-
-/* ✨ SPARKLE */
-.sparkle {
-  position: fixed;
-  width: 6px;
-  height: 6px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: sparkleFade 1s linear forwards;
-}
-
-@keyframes sparkleFade {
-  to { transform: scale(2); opacity: 0; }
-}
-
-/* 🌟 FLOATING WORDS */
-.word {
-  position: absolute;
-  bottom: -50px;
-  font-weight: bold;
-  color: rgba(255,255,255,0.8);
-  animation: wordFloat linear forwards;
-  white-space: nowrap;
-}
-
-@keyframes wordFloat {
-  100% {
-    transform: translateY(-120vh);
-    opacity: 0;
-  }
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="card" id="card">
-  <div class="heart">❤️</div>
-  <h1>You Said YES 💖</h1>
-  <p id="message"></p>
-  <p id="extraText"></p>
-</div>
-
-<div class="hearts" id="hearts"></div>
-
-<audio id="bgMusic" autoplay loop muted playsinline>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-
-<div class="music-btn" id="musicBtn">Music 🎵</div>
-
-<script>
-
-// TYPEWRITER
-const text = "From this moment, it's you and me forever... 💜✨";
-let i = 0;
-function typeWriter() {
-  if (i < text.length) {
-    message.innerHTML += text.charAt(i);
-    i++;
-    setTimeout(typeWriter, 45);
-  }
-}
-typeWriter();
-
-// ROTATING TEXT
-const loveLines = [
-  "You're my today and all my tomorrows 💕",
-  "Every heartbeat says your name ❤️",
-  "I found my forever in you 💍",
-  "You are my dream come true ✨",
-  "Together is my favorite place 💑"
-];
-
-let lineIndex = 0;
-setInterval(() => {
-  extraText.style.opacity = 0;
-  setTimeout(() => {
-    extraText.innerText = loveLines[lineIndex];
-    extraText.style.opacity = 1;
-    lineIndex = (lineIndex + 1) % loveLines.length;
-  }, 400);
-}, 3000);
-
-// HEARTS
-setInterval(() => {
-  const heart = document.createElement("span");
-  heart.innerHTML = "❤";
-  heart.style.left = Math.random()*100+"vw";
-  heart.style.fontSize = (10+Math.random()*20)+"px";
-  heart.style.animationDuration = (4+Math.random()*3)+"s";
-  hearts.appendChild(heart);
-  setTimeout(()=>heart.remove(),7000);
-},350);
-
-// 💖 FLOATING WORDS
-const words = ["Love 💖","Forever 💍","Mine ❤️","Soulmate ✨","My Heart 💕","Always 💫"];
-
-setInterval(()=>{
-  const w = document.createElement("div");
-  w.className = "word";
-  w.innerText = words[Math.floor(Math.random()*words.length)];
-  w.style.left = Math.random()*100+"vw";
-  w.style.fontSize = (14+Math.random()*16)+"px";
-  w.style.animationDuration = (5+Math.random()*4)+"s";
-  document.body.appendChild(w);
-  setTimeout(()=>w.remove(),9000);
-},700);
-
-// CONFETTI
-function createConfetti(x=null){
-  for(let i=0;i<25;i++){
-    const c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=(x??Math.random()*100)+"vw";
-    c.style.background=["#763C8C","#fa4843","#fff"][Math.floor(Math.random()*3)];
-    c.style.animationDuration=(2+Math.random()*2)+"s";
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),4000);
-  }
-}
-createConfetti();
-
-// CLICK BURST
-document.addEventListener("click",e=>{
-  createConfetti(e.clientX/window.innerWidth*100);
-});
-
-// MUSIC
-const music=document.getElementById("bgMusic");
-const btn=document.getElementById("musicBtn");
-let playing=false;
-
-document.body.addEventListener("click",()=>{
-  music.muted=false;
-  music.volume=0.4;
-  music.play();
-  playing=true;
-},{once:true});
-
-btn.onclick=()=>{
-  if(playing){
-    music.pause();
-    btn.innerText="Muted 🔇";
-  }else{
-    music.play();
-    btn.innerText="Music 🎵";
-  }
-  playing=!playing;
-};
-
-// PARALLAX
-document.addEventListener("mousemove",e=>{
-  const x=(e.clientX/window.innerWidth-0.5)*10;
-  const y=(e.clientY/window.innerHeight-0.5)*10;
-  card.style.transform=`rotateX(${-y}deg) rotateY(${x}deg)`;
-});
-
-</script>
-
-</body>
+<!DOCTYPE html>    
+<html lang="en">    
+<head>    
+<meta charset="UTF-8">    
+<title>You Said Yes 💖</title>    
+    
+<style>    
+* {    
+  margin: 0;    
+  padding: 0;    
+  box-sizing: border-box;    
+}    
+    
+body {    
+  background: linear-gradient(-45deg, #FFC568, #ff9a9e, #fad0c4, #fbc2eb);    
+  background-size: 400% 400%;    
+  animation: gradientBG 12s ease infinite;    
+  overflow: hidden;    
+  font-family: 'Segoe UI', sans-serif;    
+  display: flex;    
+  justify-content: center;    
+  align-items: center;    
+  height: 100vh;    
+  cursor: none;    
+}    
+    
+@keyframes gradientBG {    
+  0% {background-position: 0% 50%;}    
+  50% {background-position: 100% 50%;}    
+  100% {background-position: 0% 50%;}    
+}    
+    
+body::before {    
+  content: "";    
+  position: fixed;    
+  inset: 0;    
+  background: radial-gradient(circle, rgba(250,72,67,0.2), transparent 60%);    
+  animation: bgPulse 3s infinite;    
+  z-index: 0;    
+}    
+    
+@keyframes bgPulse {    
+  0%,100% { opacity: 0.3; transform: scale(1);}    
+  50% { opacity: 0.6; transform: scale(1.1);}    
+}    
+    
+body::after {    
+  content: "";    
+  position: fixed;    
+  inset: 0;    
+  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.25));    
+  pointer-events: none;    
+}    
+    
+.card {    
+  text-align: center;    
+  color: #763C8C;    
+  z-index: 2;    
+  animation: fadeIn 2s ease;    
+  transition: transform 0.2s ease;    
+  position: relative;    
+}    
+    
+.card::before {    
+  content: "";    
+  position: absolute;    
+  inset: -40px;    
+  background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);    
+  filter: blur(20px);    
+  z-index: -1;    
+}    
+    
+h1 {    
+  font-size: 3rem;    
+  margin-bottom: 10px;    
+  animation: glowText 2s ease-in-out infinite alternate;    
+}    
+    
+p {    
+  font-size: 1.4rem;    
+  min-height: 40px;    
+  transition: opacity 0.4s ease;    
+}    
+    
+/* ❤️ HEART (NO BEAT NOW) */    
+.heart {    
+  font-size: 60px;    
+  color: #fa4843;    
+  position: relative;    
+}    
+    
+.heart::before {    
+  content: "✨";    
+  position: absolute;    
+  top: -20px;    
+  right: -20px;    
+  animation: sparkleSpin 2s infinite linear;    
+}    
+    
+/* ❌ removed pulse ring */    
+.heart::after {    
+  content: "";    
+  display: none;    
+}    
+    
+@keyframes sparkleSpin {    
+  100% { transform: rotate(360deg);}    
+}    
+    
+@keyframes glowText {    
+  from { text-shadow: 0 0 10px #fff; }    
+  to { text-shadow: 0 0 30px #fa4843; }    
+}    
+    
+.hearts span {    
+  position: absolute;    
+  bottom: -50px;    
+  color: #fa4843;    
+  animation: float 6s linear infinite;    
+}    
+    
+@keyframes float {    
+  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }    
+}    
+    
+.confetti {    
+  position: absolute;    
+  width: 8px;    
+  height: 8px;    
+  top: 0;    
+  animation: fall linear forwards;    
+}    
+    
+@keyframes fall {    
+  to {    
+    transform: translateY(100vh) rotate(720deg);    
+    opacity: 0;    
+  }    
+}    
+    
+.music-btn {    
+  position: fixed;    
+  bottom: 20px;    
+  right: 20px;    
+  background: #fa4843;    
+  color: #fff;    
+  padding: 10px 15px;    
+  border-radius: 20px;    
+  cursor: pointer;    
+}    
+    
+.sparkle {    
+  position: fixed;    
+  width: 6px;    
+  height: 6px;    
+  background: white;    
+  border-radius: 50%;    
+  pointer-events: none;    
+  animation: sparkleFade 1s linear forwards;    
+}    
+    
+@keyframes sparkleFade {    
+  to { transform: scale(2); opacity: 0; }    
+}    
+    
+.word {    
+  position: absolute;    
+  bottom: -50px;    
+  font-weight: bold;    
+  color: rgba(255,255,255,0.8);    
+  animation: wordFloat linear forwards;    
+  white-space: nowrap;    
+}    
+    
+@keyframes wordFloat {    
+  100% {    
+    transform: translateY(-120vh);    
+    opacity: 0;    
+  }    
+}    
+    
+</style>    
+</head>    
+    
+<body>    
+    
+<div class="card" id="card">    
+  <div class="heart">❤️</div>    
+  <h1>You Said YES 💖</h1>    
+  <p id="message"></p>    
+  <p id="extraText"></p>    
+</div>    
+    
+<div class="hearts" id="hearts"></div>    
+    
+<audio id="bgMusic" autoplay loop muted playsinline>    
+  <source src="music.mp3" type="audio/mpeg">    
+</audio>    
+    
+<div class="music-btn" id="musicBtn">Music 🎵</div>    
+    
+<script>    
+    
+const text = "From this moment, it's you and me forever... 💜✨";    
+let i = 0;    
+function typeWriter() {    
+  if (i < text.length) {    
+    message.innerHTML += text.charAt(i);    
+    i++;    
+    setTimeout(typeWriter, 45);    
+  }    
+}    
+typeWriter();    
+    
+const loveLines = [    
+  "You're my today and all my tomorrows 💕",    
+  "Every heartbeat says your name ❤️",    
+  "I found my forever in you 💍",    
+  "You are my dream come true ✨",    
+  "Together is my favorite place 💑"    
+];    
+    
+let lineIndex = 0;    
+setInterval(() => {    
+  extraText.style.opacity = 0;    
+  setTimeout(() => {    
+    extraText.innerText = loveLines[lineIndex];    
+    extraText.style.opacity = 1;    
+    lineIndex = (lineIndex + 1) % loveLines.length;    
+  }, 400);    
+}, 3000);    
+    
+setInterval(() => {    
+  const heart = document.createElement("span");    
+  heart.innerHTML = "❤";    
+  heart.style.left = Math.random()*100+"vw";    
+  heart.style.fontSize = (10+Math.random()*20)+"px";    
+  heart.style.animationDuration = (4+Math.random()*3)+"s";    
+  hearts.appendChild(heart);    
+  setTimeout(()=>heart.remove(),7000);    
+},350);    
+    
+const words = ["Love 💖","Forever 💍","Mine ❤️","Soulmate ✨","My Heart 💕","Always 💫"];    
+    
+setInterval(()=>{    
+  const w = document.createElement("div");    
+  w.className = "word";    
+  w.innerText = words[Math.floor(Math.random()*words.length)];    
+  w.style.left = Math.random()*100+"vw";    
+  w.style.fontSize = (14+Math.random()*16)+"px";    
+  w.style.animationDuration = (5+Math.random()*4)+"s";    
+  document.body.appendChild(w);    
+  setTimeout(()=>w.remove(),9000);    
+},700);    
+    
+function createConfetti(x=null){    
+  for(let i=0;i<25;i++){    
+    const c=document.createElement("div");    
+    c.className="confetti";    
+    c.style.left=(x??Math.random()*100)+"vw";    
+    c.style.background=["#763C8C","#fa4843","#fff"][Math.floor(Math.random()*3)];    
+    c.style.animationDuration=(2+Math.random()*2)+"s";    
+    document.body.appendChild(c);    
+    setTimeout(()=>c.remove(),4000);    
+  }    
+}    
+createConfetti();    
+    
+document.addEventListener("click",e=>{    
+  createConfetti(e.clientX/window.innerWidth*100);    
+});    
+    
+const music=document.getElementById("bgMusic");    
+const btn=document.getElementById("musicBtn");    
+let playing=false;    
+    
+document.body.addEventListener("click",()=>{    
+  music.muted=false;    
+  music.volume=0.4;    
+  music.play();    
+  playing=true;    
+},{once:true});    
+    
+btn.onclick=()=>{    
+  if(playing){    
+    music.pause();    
+    btn.innerText="Muted 🔇";    
+  }else{    
+    music.play();    
+    btn.innerText="Music 🎵";    
+  }    
+  playing=!playing;    
+};    
+    
+document.addEventListener("mousemove",e=>{    
+  const x=(e.clientX/window.innerWidth-0.5)*10;    
+  const y=(e.clientY/window.innerHeight-0.5)*10;    
+  card.style.transform=`rotateX(${-y}deg) rotateY(${x}deg)`;    
+});    
+    
+</script>    
+    
+</body>    
 </html>
