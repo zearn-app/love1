@@ -1,1 +1,185 @@
-html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>You Said Yes 💖</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #FFC568;
+  overflow: hidden;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Center Card */
+.card {
+  text-align: center;
+  color: #763C8C;
+  z-index: 2;
+  animation: fadeIn 2s ease;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1.4rem;
+  min-height: 40px;
+}
+
+/* Glow Heart */
+.heart {
+  font-size: 60px;
+  color: #fa4843;
+  animation: beat 1s infinite;
+}
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Floating Hearts */
+.hearts span {
+  position: absolute;
+  bottom: -50px;
+  font-size: 20px;
+  color: #fa4843;
+  animation: float 6s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) scale(1); opacity: 1; }
+  100% { transform: translateY(-110vh) scale(1.5); opacity: 0; }
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #763C8C;
+  top: 0;
+  animation: fall 3s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* Music Toggle */
+.music-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #fa4843;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="heart">❤️</div>
+  <h1>You Said YES 💖</h1>
+  <p id="message"></p>
+</div>
+
+<div class="hearts" id="hearts"></div>
+
+<audio id="bgMusic" autoplay loop>
+  <source src="https://www.fesliyanstudios.com/play-mp3/387" type="audio/mpeg">
+</audio>
+
+<div class="music-btn" id="musicBtn">Music 🎵</div>
+
+<script>
+// 💌 TYPEWRITER MESSAGE
+const text = "From this moment, it's you and me forever... 💜✨";
+let i = 0;
+const speed = 50;
+
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("message").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, speed);
+  }
+}
+typeWriter();
+
+
+// 💕 FLOATING HEARTS
+const heartsContainer = document.getElementById("hearts");
+
+setInterval(() => {
+  const heart = document.createElement("span");
+  heart.innerHTML = "❤";
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = (10 + Math.random() * 20) + "px";
+  heart.style.animationDuration = (3 + Math.random() * 3) + "s";
+
+  heartsContainer.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 6000);
+}, 300);
+
+
+// 🎆 CONFETTI BURST
+for (let i = 0; i < 80; i++) {
+  const conf = document.createElement("div");
+  conf.classList.add("confetti");
+  conf.style.left = Math.random() * 100 + "vw";
+  conf.style.background = ["#763C8C", "#fa4843", "#fff"][Math.floor(Math.random()*3)];
+  conf.style.animationDuration = (2 + Math.random() * 2) + "s";
+
+  document.body.appendChild(conf);
+}
+
+
+// 🎵 MUSIC TOGGLE
+const music = document.getElementById("bgMusic");
+const btn = document.getElementById("musicBtn");
+
+let playing = true;
+
+btn.onclick = () => {
+  if (playing) {
+    music.pause();
+    btn.innerText = "Muted 🔇";
+  } else {
+    music.play();
+    btn.innerText = "Music 🎵";
+  }
+  playing = !playing;
+};
+
+
+// 📱 MOBILE AUTOPLAY FIX
+document.body.addEventListener("click", () => {
+  music.play();
+}, { once: true });
+
+</script>
+
+</body>
+</html>
