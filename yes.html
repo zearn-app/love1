@@ -12,7 +12,9 @@
 }
 
 body {
-  background: #FFC568;
+  background: linear-gradient(-45deg, #FFC568, #ff9a9e, #fad0c4, #fbc2eb);
+  background-size: 400% 400%;
+  animation: gradientBG 12s ease infinite;
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
@@ -22,11 +24,29 @@ body {
   cursor: none;
 }
 
+/* 🌈 BACKGROUND ANIMATION */
+@keyframes gradientBG {
+  0% {background-position: 0% 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0% 50%;}
+}
+
+/* 🌙 DARK VIGNETTE */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.25));
+  pointer-events: none;
+}
+
+/* 💌 CARD */
 .card {
   text-align: center;
   color: #763C8C;
   z-index: 2;
   animation: fadeIn 2s ease;
+  transition: transform 0.2s ease;
 }
 
 h1 {
@@ -38,6 +58,7 @@ h1 {
 p {
   font-size: 1.4rem;
   min-height: 40px;
+  transition: opacity 0.4s ease;
 }
 
 /* ❤️ HEART */
@@ -45,6 +66,22 @@ p {
   font-size: 60px;
   color: #fa4843;
   animation: beat 1s infinite;
+  position: relative;
+}
+
+/* 💖 HEART GLOW RING */
+.heart::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(250,72,67,0.4);
+  animation: pulseRing 2s infinite;
+}
+
+@keyframes pulseRing {
+  0% {transform: scale(1); opacity: 1;}
+  100% {transform: scale(1.8); opacity: 0;}
 }
 
 @keyframes beat {
@@ -117,6 +154,21 @@ p {
   }
 }
 
+/* 🌟 TWINKLE STARS */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  opacity: 0.8;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.2; }
+  to { opacity: 1; }
+}
+
 /* 🌙 GLOW PARTICLES */
 .glow {
   position: absolute;
@@ -138,7 +190,7 @@ p {
   position: absolute;
   color: #763C8C;
   font-size: 14px;
-  opacity: 50.0;
+  opacity: 0.6;
   animation: floatQuote linear infinite;
 }
 
@@ -152,7 +204,7 @@ p {
 
 <body>
 
-<div class="card">
+<div class="card" id="card">
   <div class="heart">❤️</div>
   <h1>You Said YES 💖</h1>
   <p id="message"></p>
@@ -174,15 +226,14 @@ const text = "From this moment, it's you and me forever... 💜✨";
 let i = 0;
 function typeWriter() {
   if (i < text.length) {
-    document.getElementById("message").innerHTML += text.charAt(i);
+    message.innerHTML += text.charAt(i);
     i++;
     setTimeout(typeWriter, 45);
   }
 }
 typeWriter();
 
-
-// 💖 ROTATING TEXT (SMOOTH FADE)
+// 💖 ROTATING TEXT
 const loveLines = [
   "You're my today and all my tomorrows 💕",
   "Every heartbeat says your name ❤️",
@@ -192,122 +243,119 @@ const loveLines = [
 ];
 
 let lineIndex = 0;
-const extra = document.getElementById("extraText");
-
 setInterval(() => {
-  extra.style.opacity = 0;
+  extraText.style.opacity = 0;
   setTimeout(() => {
-    extra.innerText = loveLines[lineIndex];
-    extra.style.opacity = 1;
+    extraText.innerText = loveLines[lineIndex];
+    extraText.style.opacity = 1;
     lineIndex = (lineIndex + 1) % loveLines.length;
   }, 400);
 }, 3000);
-
 
 // 💕 HEARTS
 setInterval(() => {
   const heart = document.createElement("span");
   heart.innerHTML = "❤";
-  heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = (10 + Math.random() * 20) + "px";
-  heart.style.animationDuration = (4 + Math.random() * 3) + "s";
-  document.getElementById("hearts").appendChild(heart);
-  setTimeout(() => heart.remove(), 7000);
-}, 350);
-
+  heart.style.left = Math.random()*100+"vw";
+  heart.style.fontSize = (10+Math.random()*20)+"px";
+  heart.style.animationDuration = (4+Math.random()*3)+"s";
+  hearts.appendChild(heart);
+  setTimeout(()=>heart.remove(),7000);
+},350);
 
 // 🎆 CONFETTI
-function createConfetti(x = null) {
-  for (let i = 0; i < 25; i++) {
-    const c = document.createElement("div");
-    c.className = "confetti";
-    c.style.left = (x ?? Math.random()*100) + "vw";
-    c.style.background = ["#763C8C","#fa4843","#fff"][Math.floor(Math.random()*3)];
-    c.style.animationDuration = (2 + Math.random()*2) + "s";
+function createConfetti(x=null){
+  for(let i=0;i<25;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=(x??Math.random()*100)+"vw";
+    c.style.background=["#763C8C","#fa4843","#fff"][Math.floor(Math.random()*3)];
+    c.style.animationDuration=(2+Math.random()*2)+"s";
     document.body.appendChild(c);
-    setTimeout(() => c.remove(), 4000);
+    setTimeout(()=>c.remove(),4000);
   }
 }
 createConfetti();
 
+// 🌟 STARS
+for(let i=0;i<80;i++){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=Math.random()*100+"vh";
+  s.style.animationDuration=(1+Math.random()*2)+"s";
+  document.body.appendChild(s);
+}
 
 // 🌙 GLOW PARTICLES
-setInterval(() => {
-  const g = document.createElement("div");
-  g.className = "glow";
-  g.style.left = Math.random()*100 + "vw";
-  g.style.animationDuration = (6 + Math.random()*6) + "s";
+setInterval(()=>{
+  const g=document.createElement("div");
+  g.className="glow";
+  g.style.left=Math.random()*100+"vw";
+  g.style.animationDuration=(6+Math.random()*6)+"s";
   document.body.appendChild(g);
-  setTimeout(() => g.remove(), 12000);
-}, 600);
-
+  setTimeout(()=>g.remove(),12000);
+},600);
 
 // 💭 FLOATING WORDS
-const words = ["Love 💖","Forever 💍","Soulmate 💑","Mine ❤️","Always 💞"];
-setInterval(() => {
-  const q = document.createElement("div");
-  q.className = "quote";
-  q.innerText = words[Math.floor(Math.random()*words.length)];
-  q.style.left = Math.random()*100 + "vw";
-  q.style.animationDuration = (8 + Math.random()*6) + "s";
+const words=["Love 💖","Forever 💍","Soulmate 💑","Mine ❤️","Always 💞"];
+setInterval(()=>{
+  const q=document.createElement("div");
+  q.className="quote";
+  q.innerText=words[Math.floor(Math.random()*words.length)];
+  q.style.left=Math.random()*100+"vw";
+  q.style.animationDuration=(8+Math.random()*6)+"s";
   document.body.appendChild(q);
-  setTimeout(() => q.remove(), 14000);
-}, 2200);
+  setTimeout(()=>q.remove(),14000);
+},2200);
 
-
-// ✨ CURSOR TRAIL (OPTIMIZED)
-let lastSparkle = 0;
-document.addEventListener("mousemove", e => {
-  if (Date.now() - lastSparkle < 40) return;
-  lastSparkle = Date.now();
-
-  const s = document.createElement("div");
-  s.className = "sparkle";
-  s.style.left = e.clientX + "px";
-  s.style.top = e.clientY + "px";
+// ✨ CURSOR TRAIL
+let lastSparkle=0;
+document.addEventListener("mousemove",e=>{
+  if(Date.now()-lastSparkle<40)return;
+  lastSparkle=Date.now();
+  const s=document.createElement("div");
+  s.className="sparkle";
+  s.style.left=e.clientX+"px";
+  s.style.top=e.clientY+"px";
   document.body.appendChild(s);
-  setTimeout(() => s.remove(), 1000);
+  setTimeout(()=>s.remove(),1000);
 });
-
 
 // 🎇 CLICK BURST
-document.addEventListener("click", e => {
-  createConfetti(e.clientX / window.innerWidth * 100);
-
-  for (let i = 0; i < 8; i++) {
-    const s = document.createElement("div");
-    s.className = "sparkle";
-    s.style.left = e.clientX + "px";
-    s.style.top = e.clientY + "px";
-    s.style.background = "#fa4843";
-    document.body.appendChild(s);
-    setTimeout(() => s.remove(), 800);
-  }
+document.addEventListener("click",e=>{
+  createConfetti(e.clientX/window.innerWidth*100);
 });
 
-
 // 🎵 MUSIC
-const music = document.getElementById("bgMusic");
-const btn = document.getElementById("musicBtn");
-let playing = false;
+const music=document.getElementById("bgMusic");
+const btn=document.getElementById("musicBtn");
+let playing=false;
 
-document.body.addEventListener("click", () => {
-  music.muted = false;
-  music.volume = 0.4;
+document.body.addEventListener("click",()=>{
+  music.muted=false;
+  music.volume=0.4;
   music.play();
-  playing = true;
-}, { once: true });
+  playing=true;
+},{once:true});
 
-btn.onclick = () => {
-  if (playing) {
+btn.onclick=()=>{
+  if(playing){
     music.pause();
-    btn.innerText = "Muted 🔇";
-  } else {
+    btn.innerText="Muted 🔇";
+  }else{
     music.play();
-    btn.innerText = "Music 🎵";
+    btn.innerText="Music 🎵";
   }
-  playing = !playing;
+  playing=!playing;
 };
+
+// 💫 PARALLAX CARD
+document.addEventListener("mousemove",e=>{
+  const x=(e.clientX/window.innerWidth-0.5)*10;
+  const y=(e.clientY/window.innerHeight-0.5)*10;
+  card.style.transform=`rotateX(${-y}deg) rotateY(${x}deg)`;
+});
 
 </script>
 
