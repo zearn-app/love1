@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: #FFC568;
   display: flex;
@@ -23,8 +27,7 @@ body {
 }
 
 /* Proposal */
-.proposal, .final {
-  position: absolute;
+.proposal {
   text-align: center;
   color: #763C8C;
 }
@@ -38,11 +41,11 @@ body {
 }
 
 button {
-  padding: 10px 20px;
+  padding: 12px 20px;
   margin: 10px;
-  font-size: 18px;
   border: none;
   border-radius: 8px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -54,4 +57,9 @@ button {
 #noBtn {
   background: #763C8C;
   color: white;
+}
+
+.final {
+  text-align: center;
+  color: #763C8C;
 }
