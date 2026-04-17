@@ -1,61 +1,57 @@
-*, *:before, *:after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  min-height: 100vh;
+body {
+  background: #FFC568;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #82C8E5;
-  font-size: 62.5%;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-@media screen and (max-width: 520px) {
-  html, body {
-    /* don't know how to set default units to rem in mojs :(( */
-  }
+  height: 100vh;
+  font-family: sans-serif;
 }
 
 .container {
-  width: 50rem;
-  height: 20rem;
+  width: 500px;
+  height: 200px;
   position: relative;
 }
 
-.svg-container {
-  z-index: 2;
-  position: absolute;
-}
-
-.mo-container {
-  width: 100%;
-  height: 100%;
-}
-
 .line {
-  fill: none;
-  stroke: #FFFFFF;
+  stroke: #fff;
   stroke-width: 8;
-  stroke-linecap: round;
-  stroke-miterlimit: 10;
 }
 
 .lttr {
   fill: #763C8C;
 }
 
-.sound {
-  position: fixed;
+/* Proposal */
+.proposal, .final {
+  position: absolute;
+  text-align: center;
   color: #763C8C;
-  font-size: 1.6rem;
-  bottom: 1rem;
-  right: 1rem;
-  text-decoration: underline;
-  cursor: default;
 }
-.sound--off {
-  text-decoration: line-through;
+
+.hidden {
+  display: none;
+}
+
+.buttons {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#yesBtn {
+  background: #fa4843;
+  color: white;
+}
+
+#noBtn {
+  background: #763C8C;
+  color: white;
 }
